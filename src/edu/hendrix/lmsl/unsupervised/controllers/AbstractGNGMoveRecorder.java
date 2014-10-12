@@ -64,7 +64,6 @@ abstract public class AbstractGNGMoveRecorder<M, G extends AbstractGNGNodeMoves<
 				while (!Button.ESCAPE.isDown()) {
 					IntImage img = FuzzyGNGController.grabGNGImage(true);
 					Key currentKey = getCurrentKey();
-					lastKey = currentKey;
 					Flag newFlag = key2Flag.containsKey(currentKey) ? key2Flag.get(currentKey) : currentFlag;
 					if (currentFlag != newFlag) {
 						performCurrentAction();
@@ -73,6 +72,7 @@ abstract public class AbstractGNGMoveRecorder<M, G extends AbstractGNGNodeMoves<
 					if (currentFlag != Flag.STOP && (recordAll || currentKey != lastKey)) {
 						updateGNG(currentFlag, img);
 					}
+					lastKey = currentKey;
 				}
 			} catch (Exception exc) {
 				exc.printStackTrace();

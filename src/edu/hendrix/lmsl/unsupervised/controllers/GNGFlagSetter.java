@@ -18,6 +18,12 @@ public class GNGFlagSetter<F extends Enum<F>> implements FlagSetter<F> {
 		this(flagType, GNGStorage.getEV3Storage(flagType).choices()[GNGStorage.getEV3Storage(flagType).choices().length - 1]);
 	}
 	
+	public GNGFlagSetter(GNGNodeMoves<F> gng) throws IOException {
+		this.gng = gng;
+		gng.purgeMoveFreeNodes();
+		Webcam.start();
+	}
+	
 	public GNGFlagSetter(Class<F> flagType, String choice) throws IOException {
 		GNGStorage<F> storage = GNGStorage.getEV3Storage(flagType);
 		for (String option: storage.choices()) {
