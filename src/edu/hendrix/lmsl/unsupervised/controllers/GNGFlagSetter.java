@@ -21,7 +21,7 @@ public class GNGFlagSetter<F extends Enum<F>> implements FlagSetter<F> {
 	public GNGFlagSetter(GNGNodeMoves<F> gng) throws IOException {
 		this.gng = gng;
 		gng.purgeMoveFreeNodes();
-		Webcam.start();
+		Webcam.start(176, 144);
 	}
 	
 	public GNGFlagSetter(Class<F> flagType, String choice) throws IOException {

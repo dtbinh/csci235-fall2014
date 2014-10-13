@@ -33,6 +33,10 @@ public class IntImage implements SupportsArithmetic<IntImage> {
 		return x >= 0 && y >= 0 && x < getWidth() && y < getHeight();
 	}
 	
+	public boolean matchesSizeWith(IntImage other) {
+		return this.getWidth() == other.getWidth() && this.getHeight() == other.getHeight();
+	}
+	
 	public int mean() {
 		int sum = 0;
 		for (int x = 0; x < getWidth(); ++x) {

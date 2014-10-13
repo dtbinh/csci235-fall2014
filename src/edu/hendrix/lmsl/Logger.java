@@ -13,6 +13,9 @@ public class Logger {
 		String logFileName = System.getProperty("sun.java.command");
 		logFileName = logFileName.substring(logFileName.lastIndexOf('.') + 1) + ".log";
 		logFile = new File("/home/lejos/programs/" + logFileName);
+		if (logFile.exists()) {
+			logFile.delete();
+		}
 	}
 	
 	public static Logger instance() {
@@ -24,7 +27,7 @@ public class Logger {
 	
 	public void log(String line) {
 		try {
-			PrintWriter pw = new PrintWriter(new FileWriter(logFile));
+			PrintWriter pw = new PrintWriter(new FileWriter(logFile, true));
 			pw.println(line);
 			pw.close();
 		} catch (IOException e) {
