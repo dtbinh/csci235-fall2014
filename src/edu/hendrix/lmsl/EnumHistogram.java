@@ -63,8 +63,10 @@ public class EnumHistogram<T extends Enum<T>> extends SemiAbstractHistogram<T,En
 		EnumHistogram<T> result = new EnumHistogram<T>(enumType);
 		String[] pairs = src.substring(1, src.length() - 1).split(", ");
 		for (String pair: pairs) {
-			String[] kv = pair.split("=");
-			result.setCountFor(Enum.valueOf(enumType,kv[0]), Integer.parseInt(kv[1]));
+			if (pair.length() > 0) {
+				String[] kv = pair.split("=");
+				result.setCountFor(Enum.valueOf(enumType,kv[0]), Integer.parseInt(kv[1]));
+			}
 		}
 		return result;
 	}

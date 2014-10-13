@@ -50,4 +50,9 @@ public class FuzzyGNGMoves<F extends Enum<F>> extends AbstractGNGNodeMoves<EnumH
 	public EnumHistogram<F> moveFromString(Class<F> enumType, String src) {
 		return EnumHistogram.fromString(enumType, src);
 	}
+
+	@Override
+	protected boolean purge(EnumHistogram<F> candidate) {
+		return candidate.getTotalCount() == 0;
+	}
 }

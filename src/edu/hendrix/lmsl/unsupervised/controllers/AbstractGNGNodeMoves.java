@@ -23,6 +23,8 @@ abstract public class AbstractGNGNodeMoves<R, F extends Enum<F>> {
 	
 	abstract public R moveFromString(Class<F> enumType, String src);
 	
+	abstract protected boolean purge(R candidate);
+	
 	public AbstractGNGNodeMoves() {
 		node2move = new TreeMap<Integer,R>();
 		node2hits = new Histogram<Integer>();
@@ -98,7 +100,7 @@ abstract public class AbstractGNGNodeMoves<R, F extends Enum<F>> {
 	
 	public void purgeMoveFreeNodes() {
 		for (int node: gng.getAllCategories()) {
-			if (!hasMoveFor(node)) {
+			if (!hasMoveFor(node) || purge(getMoveFor(node))) {
 				gng.deleteNode(node);
 			}
 		}

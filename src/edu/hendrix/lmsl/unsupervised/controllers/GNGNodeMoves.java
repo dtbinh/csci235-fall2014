@@ -47,4 +47,9 @@ public class GNGNodeMoves<F extends Enum<F>> extends AbstractGNGNodeMoves<F,F> {
 			}
 		}
 	}
+
+	@Override
+	protected boolean purge(F candidate) {
+		return false;
+	}
 }
