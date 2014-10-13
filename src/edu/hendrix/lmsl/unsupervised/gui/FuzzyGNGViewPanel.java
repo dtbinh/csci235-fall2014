@@ -10,6 +10,11 @@ public class FuzzyGNGViewPanel extends AbstractGNGViewPanel<EnumHistogram<Flag>,
 	
 	public FuzzyGNGViewPanel(FuzzyGNGMoves<Flag> gng) {
 		super(gng);
+		for (int nodeNum: gng.getAllNodeNums()) {
+			if (!gng.hasMoveFor(nodeNum)) {
+				gng.forceMoveChange(nodeNum, new EnumHistogram<Flag>(Flag.class));
+			}
+		}
 	}
 
 	@Override
