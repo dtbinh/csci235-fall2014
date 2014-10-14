@@ -52,7 +52,7 @@ public class FuzzyGNGMoves<F extends Enum<F>> extends AbstractGNGNodeMoves<EnumH
 	}
 
 	@Override
-	protected boolean purge(EnumHistogram<F> candidate) {
+	public boolean purge(EnumHistogram<F> candidate) {
 		return candidate.getTotalCount() == 0;
 	}
 }

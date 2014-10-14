@@ -119,7 +119,7 @@ abstract public class AbstractGNGViewPanel<R,G extends AbstractGNGNodeMoves<R,Fl
 	
 	protected void resetCurrentNode(int update) {
 		currentNode = getUpdatedIndex(currentNode, update);
-		while (withMovesOnly.isSelected() && !gng.hasMoveFor(getNodeNum())) {
+		while (withMovesOnly.isSelected() && (!gng.hasMoveFor(getNodeNum()) || gng.purge(gng.getMoveFor(getNodeNum())))) {
 			currentNode = getUpdatedIndex(currentNode, update);
 		}
 		setNodeField();

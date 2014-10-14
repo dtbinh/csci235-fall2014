@@ -23,7 +23,7 @@ abstract public class AbstractGNGNodeMoves<R, F extends Enum<F>> {
 	
 	abstract public R moveFromString(Class<F> enumType, String src);
 	
-	abstract protected boolean purge(R candidate);
+	abstract public boolean purge(R candidate);
 	
 	public AbstractGNGNodeMoves() {
 		node2move = new TreeMap<Integer,R>();
