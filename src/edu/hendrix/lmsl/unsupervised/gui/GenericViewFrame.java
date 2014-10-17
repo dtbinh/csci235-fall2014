@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
@@ -60,22 +61,29 @@ abstract public class GenericViewFrame<R, G extends AbstractGNGNodeMoves<R,Flag>
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				S storage = getStorage();
-				boolean anyChanged = false;
+				ArrayList<String> newNames = new ArrayList<String>();
 				for (Entry<String, V> choice: name2panel.entrySet()) {
 					if (choice.getValue().isChanged()) {
-						anyChanged = true;
 						try {
 							String newName = storage.getNextName();
 							storage.save(choice.getValue().getGNG());
 							JOptionPane.showMessageDialog(null, "Updated version of \"" + choice.getKey() + "\" saved as \"" + newName + "\"");
-							openChoice(storage, newName);
-							allGNGs.setSelectedIndex(allGNGs.getComponentCount() - 1);
+							newNames.add(newName);
+							choice.getValue().markSaved();
 						} catch (IOException e1) {
 							JOptionPane.showMessageDialog(null, "Save failed for changed GNG \"" + choice.getKey() + "\"");
 						}
 					} 
 				}
-				if (!anyChanged) {
+				if (newNames.size() > 0) {
+					for (String newName: newNames) {
+						try {
+							openChoice(storage, newName);
+						} catch (FileNotFoundException e1) {
+							JOptionPane.showMessageDialog(null, "Could not open " + newName);
+						}						
+					}
+				} else {
 					JOptionPane.showMessageDialog(null, "No saves attempted; none changed.");
 				}
 			}});
@@ -128,5 +136,6 @@ abstract public class GenericViewFrame<R, G extends AbstractGNGNodeMoves<R,Flag>
 		V panel = makeViewPanel(storage.open(choice));
 		allGNGs.addTab(choice, panel);
 		name2panel.put(choice, panel);		
+		allGNGs.setSelectedIndex(allGNGs.getComponentCount() - 1);
 	}
 }

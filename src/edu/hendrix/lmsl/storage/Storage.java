@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Scanner;
 
 abstract public class Storage<T> {
@@ -46,9 +48,30 @@ abstract public class Storage<T> {
 		return altOpen(picks[picks.length - 1], filename);
 	}
 	
+	public String[] choices(File target) {
+		if (target.exists()) {
+			String[] targets = target.list();
+			sort(targets);
+			return targets;
+		} else {
+			return new String[0];
+		}
+	}
+	
 	public String[] choices() {
-		File target = new File(storageDir);
-		return target.exists() ? target.list() : new String[0];
+		return choices(new File(storageDir));
+	}
+	
+	public static void sort(String[] targets) {
+		Arrays.sort(targets, new Comparator<String>() {
+			@Override
+			public int compare(String o1, String o2) {
+				return o1.length() < o2.length() 
+						? -1
+						: o1.length() > o2.length() 
+							? 1
+							: o1.compareTo(o2);
+			}});
 	}
 	
 	public void save(T gng) throws IOException {
@@ -89,6 +112,7 @@ abstract public class Storage<T> {
 		PrintWriter pw = new PrintWriter(new FileWriter(out));
 		pw.println(contents);
 		pw.close();
+		System.out.println("Data shipped to " + out);
 	}
 	
 	private void ensureDirectory() throws IOException {
@@ -101,14 +125,17 @@ abstract public class Storage<T> {
 	}
 	
 	public String getNextName() {
-		File target = new File(storageDir);
-		String[] files = target.list();
+		return getNextName(new File(storageDir));
+	}
+	
+	public String getNextName(File target) {
+		String[] files = choices(target);
 		return files.length == 0 ? "1" : Integer.toString(1 + Integer.parseInt(files[files.length - 1]));
+		
 	}
 	
 	private String getFilenamePreview(File target) {
-		String[] files = target.list();
-		return storageDir + (files.length == 0 ? "1" : Integer.toString(1 + Integer.parseInt(files[files.length - 1])));
+		return target + File.separator + getNextName(target);
 	}
 	
 	private String getNextFilename() {

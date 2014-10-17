@@ -29,6 +29,8 @@ abstract public class AbstractGNGViewPanel<R,G extends AbstractGNGNodeMoves<R,Fl
 	
 	public void markChanged() {isChanged = true;}
 	
+	public void markSaved() {isChanged = false;}
+	
 	public boolean isChanged() {return isChanged;}
 	
 	public G getGNG() {return gng;}
