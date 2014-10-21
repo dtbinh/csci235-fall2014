@@ -1,5 +1,6 @@
 package edu.hendrix.ev3webcam;
 
+import java.util.ArrayList;
 import java.util.BitSet;
 
 import lejos.hardware.lcd.LCD;
@@ -66,12 +67,28 @@ public class BooleanImage {
 	
 	public boolean inBounds(int x, int y) {return x >= 0 && y >= 0 && x < getWidth() && y < getHeight();}
 	
-	public boolean isOn(int x, int y) {return values.get(y * width + x);}
+	public boolean isOn(int x, int y) {return values.get(toIndex(x,y));}
 	
-	public void set(int x, int y, boolean isOn) {values.set(y * width + x, isOn);}
+	public void set(int x, int y, boolean isOn) {values.set(toIndex(x,y), isOn);}
 	
 	public void flip(int x, int y) {
 		set(x, y, !isOn(x, y));
+	}
+	
+	private final int toIndex(int x, int y) {
+		return y * width + x;
+	}
+	
+	private final Point fromIndex(int i) {
+		return new Point(i % width, i / width);
+	}
+	
+	public ArrayList<Point> getSetPoints() {
+		ArrayList<Point> result = new ArrayList<Point>();
+		for (int i = values.nextSetBit(0); i >= 0; i = values.nextSetBit(i+1)) {
+			result.add(fromIndex(i));
+		}
+		return result;
 	}
 	
 	public void flipColumn(int x) {
@@ -134,7 +151,6 @@ public class BooleanImage {
 		int colPart = getScaledX(x);
 		return rowPart + colPart;
 	}
-	
 	
 	public void displayScaled() {
 		for (int x = 0; x < LCD.SCREEN_WIDTH; ++x) {
