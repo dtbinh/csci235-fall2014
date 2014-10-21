@@ -9,10 +9,12 @@ import edu.hendrix.lmsl.FlagSetter;
 public class Localizers implements FlagSetter<FlagName> {
 	private GyroLocalizer gyro;
 	private WheelLocalizer wheel;
+	private EV3GyroSensor gyroSensor;
 	
 	public Localizers(NXTRegulatedMotor left, NXTRegulatedMotor right, EV3GyroSensor gyro) {
 		this.gyro = new GyroLocalizer(left, right, gyro);
 		this.wheel = new WheelLocalizer(left, right);
+		gyroSensor = gyro;
 	}
 
 	@Override
@@ -28,5 +30,5 @@ public class Localizers implements FlagSetter<FlagName> {
 	}
 
 	@Override
-	public void close() {}
+	public void close() {gyroSensor.close();}
 }
