@@ -25,7 +25,7 @@ abstract public class ImageMatchLocalizer<T,M extends ImageMatcher<T>> {
 		this.checkDistance = checkDistance;
 	}
 	
-	public static double getImageShare(double imgDist) {
+	public double getImageShare(double imgDist) {
 		// Place your solution here
 		// This version simply replaces the original location
 		// with that given for the winning image.
