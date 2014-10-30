@@ -1,4 +1,4 @@
-package edu.hendrix.lmsl.demos.localize1;
+package ev3demo;
 
 import edu.hendrix.lmsl.Logger;
 import lejos.hardware.Button;
@@ -7,7 +7,7 @@ import lejos.hardware.motor.Motor;
 import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3GyroSensor;
 
-public class GyroDemo {
+public class GyroDemo3 {
 	public static final int x0 = LCD.SCREEN_WIDTH / 2;
 	public static final int y0 = LCD.SCREEN_HEIGHT / 2;
 	
@@ -16,33 +16,17 @@ public class GyroDemo {
 		Motor.D.setSpeed(100);
 		EV3GyroSensor gyro = new EV3GyroSensor(SensorPort.S4);
 		float[] value = new float[1];
-		gyro.getAngleMode().fetchSample(value, 0);
-		WheelLocalizer tracker = new WheelLocalizer(Motor.A, Motor.D);
-		double lastAngle = 0;
-		double lastWheel = 0;
-		DotLine gyroLine = null;
-		DotLine wheelLine = null;
+		LocationTrackerGyro tracker = new LocationTrackerGyro();
 		while (!Button.ESCAPE.isDown()) {
 			
 			gyro.getAngleMode().fetchSample(value, 0);
-			double angle = Math.toRadians(value[0]);
-			if (angle != lastAngle || gyroLine == null) {
-				if (gyroLine != null) {gyroLine.erase();}
-				gyroLine = new DotLine(x0, y0, angle, y0);
-				gyroLine.render();
-				lastAngle = angle;
-			}
 			
-			tracker.update();
-			double wheel = tracker.getTheta();
-			if (wheel != lastWheel || wheelLine == null) {
-				if (wheelLine != null) {wheelLine.erase();}
-				wheelLine = new DotLine(x0, y0, wheel, y0/2);
-				wheelLine.render();
-				lastWheel = wheel;
-			}
+			tracker.updatedCount(Motor.A.getTachoCount(), Motor.D.getTachoCount(), value[0]);
 			
-			Logger.instance().log(tracker.toString() + ": " + String.format("%6.2f", angle));
+			Logger.instance().log(tracker.toString());
+			LCD.drawString(String.format("%6.2f     ", tracker.getX()), 0, 0);
+			LCD.drawString(String.format("%6.2f     ", tracker.getY()), 0, 1);
+			LCD.drawString(String.format("%6.2f     ", tracker.getTheta()), 0, 2);
 			if (Button.LEFT.isDown()) {
 				Motor.A.backward();
 				Motor.D.forward();

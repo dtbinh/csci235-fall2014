@@ -23,7 +23,7 @@ public class Chooser<T, S extends Storage<T>> {
 	public void choose(S storage) {
 		String[] choices = storage.choices();
 		if (choices.length == 0) {
-			System.out.println("No GNGs available");
+			System.out.println("None available");
 			while (!Button.ESCAPE.isDown());
 		} else {
 			int choice = choices.length - 1;

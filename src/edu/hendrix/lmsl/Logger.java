@@ -27,7 +27,7 @@ public class Logger {
 	
 	public void log(String line) {
 		try {
-			PrintWriter pw = new PrintWriter(new FileWriter(logFile, true));
+			PrintWriter pw = new PrintWriter(new FileWriter(logFile, logFile.exists()));
 			pw.println(line);
 			pw.close();
 		} catch (IOException e) {

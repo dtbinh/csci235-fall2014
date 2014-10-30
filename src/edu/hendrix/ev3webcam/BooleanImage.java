@@ -103,6 +103,12 @@ public class BooleanImage {
 		}
 	}
 	
+	public void flipAll() {
+		for (int x = 0; x < getWidth(); ++x) {
+			flipColumn(x);
+		}
+	}
+	
 	public void flipRectangle(int x, int y, int width, int height) {
 		int xMin = x - width/2;
 		int xMax = x + width/2;

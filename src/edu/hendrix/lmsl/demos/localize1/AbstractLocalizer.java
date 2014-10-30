@@ -33,6 +33,12 @@ abstract public class AbstractLocalizer {
 		y += r * Math.sin(theta);
 	}
 	
+	public void reset(Location fromElsewhere) {
+		theta = fromElsewhere.getTheta();
+		x = fromElsewhere.getX();
+		y = fromElsewhere.getY();
+	}
+	
 	abstract protected double getUpdatedTheta();
 	
 	public double getLeftChange() {return changeLeft;}
@@ -41,6 +47,10 @@ abstract public class AbstractLocalizer {
 	public double getX() {return x;}
 	public double getY() {return y;}
 	public double getTheta() {return theta;}
+	
+	public Location getLocation() {
+		return new Location(x, y, theta);
+	}
 	
 	public String toString() {
 		return String.format("(%6.2f,%6.2f,%6.2f)", x, y, theta);

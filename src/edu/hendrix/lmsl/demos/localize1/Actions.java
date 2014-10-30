@@ -13,6 +13,8 @@ public class Actions extends ActionMap<ModeName> {
 
 			@Override
 			public void begin() {
+				Motor.A.setSpeed(400);
+				Motor.D.setSpeed(400);
 				Motor.A.forward();
 				Motor.D.forward();
 			}
@@ -25,6 +27,8 @@ public class Actions extends ActionMap<ModeName> {
 
 			@Override
 			public void begin() {
+				Motor.A.setSpeed(200);
+				Motor.D.setSpeed(200);
 				Motor.A.backward();
 				Motor.D.forward();
 			}
@@ -37,6 +41,8 @@ public class Actions extends ActionMap<ModeName> {
 
 			@Override
 			public void begin() {
+				Motor.A.setSpeed(200);
+				Motor.D.setSpeed(200);
 				Motor.A.forward();
 				Motor.D.backward();
 			}

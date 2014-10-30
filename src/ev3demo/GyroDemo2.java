@@ -1,4 +1,4 @@
-package edu.hendrix.lmsl.demos.localize1;
+package ev3demo;
 
 import edu.hendrix.lmsl.Logger;
 import lejos.hardware.Button;
@@ -7,7 +7,7 @@ import lejos.hardware.motor.Motor;
 import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3GyroSensor;
 
-public class GyroDemo {
+public class GyroDemo2 {
 	public static final int x0 = LCD.SCREEN_WIDTH / 2;
 	public static final int y0 = LCD.SCREEN_HEIGHT / 2;
 	
@@ -17,7 +17,7 @@ public class GyroDemo {
 		EV3GyroSensor gyro = new EV3GyroSensor(SensorPort.S4);
 		float[] value = new float[1];
 		gyro.getAngleMode().fetchSample(value, 0);
-		WheelLocalizer tracker = new WheelLocalizer(Motor.A, Motor.D);
+		LocationTrackerWheel tracker = new LocationTrackerWheel();
 		double lastAngle = 0;
 		double lastWheel = 0;
 		DotLine gyroLine = null;
@@ -33,11 +33,11 @@ public class GyroDemo {
 				lastAngle = angle;
 			}
 			
-			tracker.update();
+			tracker.updatedCount(Motor.A.getTachoCount(), Motor.D.getTachoCount());
 			double wheel = tracker.getTheta();
 			if (wheel != lastWheel || wheelLine == null) {
 				if (wheelLine != null) {wheelLine.erase();}
-				wheelLine = new DotLine(x0, y0, wheel, y0/2);
+				wheelLine = new DotLine(x0, y0, wheel, y0);
 				wheelLine.render();
 				lastWheel = wheel;
 			}
