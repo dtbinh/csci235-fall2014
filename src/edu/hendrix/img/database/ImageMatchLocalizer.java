@@ -60,6 +60,7 @@ abstract public class ImageMatchLocalizer<T,M extends ImageMatcher<T>> {
 					if (at.distanceTo(prev) > checkDistance) {
 						mover.stop();
 						ImageMatch now = matcher.getBestMatch(img);
+						LCD.drawString(String.format("%7.2f    ", now.getDistance()), 0, 6);
 						IntImage match4 = IntImage.toShrunkenGrayInts(now.getImage(), 4);
 						match4.displayLCD(0, LCD.SCREEN_HEIGHT / 2);
 						prev = now.getLocation();
