@@ -29,7 +29,7 @@ abstract public class ImageMatchLocalizer<T,M extends ImageMatcher<T>> {
 		// Place your solution here
 		// This version simply replaces the original location
 		// with that given for the winning image.
-		return 1.0;
+		return 0.0;
 	}
 	
 	abstract public M makeMatcherFrom(YUYVImageList images);
@@ -59,13 +59,19 @@ abstract public class ImageMatchLocalizer<T,M extends ImageMatcher<T>> {
 					Location at = localizer.getLocation();
 					if (at.distanceTo(prev) > checkDistance) {
 						mover.stop();
+						LCD.drawString("   ", 10, 2);
 						ImageMatch now = matcher.getBestMatch(img);
 						LCD.drawString(String.format("%7.2f    ", now.getDistance()), 0, 6);
 						IntImage match4 = IntImage.toShrunkenGrayInts(now.getImage(), 4);
 						match4.displayLCD(0, LCD.SCREEN_HEIGHT / 2);
-						prev = now.getLocation();
 						localizer.reset(at.partialMeanWith(prev, getImageShare(now.getDistance())));
-						mover.resume();
+						prev = localizer.getLocation();
+						LCD.drawString("OK!", 10, 2);
+					} else if (Button.DOWN.isDown()) {
+						LCD.drawString("   ", 10, 2);
+						mover.stop();
+						localizer.totalReset();
+						LCD.drawString("OK!", 10, 2);
 					} else {
 						mover.move();
 					}

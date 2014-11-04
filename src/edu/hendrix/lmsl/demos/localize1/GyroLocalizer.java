@@ -18,5 +18,10 @@ public class GyroLocalizer extends AbstractLocalizer {
 		gyro.getAngleMode().fetchSample(value, 0);
 		return Math.toRadians(value[0]);
 	}
-
+	
+	public void totalReset() {
+		gyro.getRateMode();
+		gyro.getAngleMode();
+		super.reset(new Location(0, 0, 0));
+	}
 }
