@@ -8,11 +8,9 @@ import lejos.hardware.lcd.LCD;
 import lejos.hardware.motor.Motor;
 import lejos.hardware.motor.NXTRegulatedMotor;
 import lejos.hardware.port.SensorPort;
-import lejos.hardware.sensor.EV3GyroSensor;
 import edu.hendrix.ev3webcam.BooleanImage;
 import edu.hendrix.ev3webcam.Webcam;
 import edu.hendrix.ev3webcam.YUYVImage;
-import edu.hendrix.lmsl.demos.localize1.AbstractLocalizer;
 import edu.hendrix.lmsl.demos.localize1.GyroLocalizer;
 
 public class Photographer {
@@ -26,8 +24,7 @@ public class Photographer {
 	public void run() {
 		try {
 			ButtonMover mover = new ButtonMover(M_LEFT, M_RIGHT, 300, 150);
-			EV3GyroSensor gyro = new EV3GyroSensor(SensorPort.S4);
-			AbstractLocalizer localizer = new GyroLocalizer(M_LEFT, M_RIGHT, gyro);
+			GyroLocalizer localizer = new GyroLocalizer(M_LEFT, M_RIGHT, SensorPort.S4);
 			
 			YUYVImageList images = new YUYVImageList();
 			Webcam.start();
@@ -55,7 +52,7 @@ public class Photographer {
 			mover.stop();
 			double fps = Webcam.end();
 			LCD.clear();
-			gyro.close();
+			localizer.close();
 			System.out.println(String.format("%5.2f fps", fps));
 			if (images.size() > 0) {
 				System.out.println("Saving images...");

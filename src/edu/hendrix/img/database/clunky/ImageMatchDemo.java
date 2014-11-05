@@ -6,7 +6,6 @@ import lejos.hardware.Button;
 import lejos.hardware.lcd.LCD;
 import lejos.hardware.motor.Motor;
 import lejos.hardware.port.SensorPort;
-import lejos.hardware.sensor.EV3GyroSensor;
 import edu.hendrix.ev3webcam.Webcam;
 import edu.hendrix.ev3webcam.YUYVImage;
 import edu.hendrix.img.IntImage;
@@ -24,8 +23,7 @@ abstract public class ImageMatchDemo<T,M extends ImageMatcher<T>> {
 
 	public void run() {
 		ButtonMover mover = new ButtonMover(Motor.A, Motor.D, 300, 150);
-		EV3GyroSensor gyro = new EV3GyroSensor(SensorPort.S4);
-		GyroLocalizer localizer = new GyroLocalizer(Motor.A, Motor.D, gyro);
+		GyroLocalizer localizer = new GyroLocalizer(Motor.A, Motor.D, SensorPort.S4);
 		YUYVImageListStorage storage = YUYVImageListStorage.getEV3Storage();
 		Chooser<YUYVImageList,YUYVImageListStorage> chooser = new Chooser<YUYVImageList,YUYVImageListStorage>();
 		chooser.choose(storage);
@@ -52,7 +50,7 @@ abstract public class ImageMatchDemo<T,M extends ImageMatcher<T>> {
 				}
 
 				double fps = Webcam.end();
-				gyro.close();
+				localizer.close();
 				LCD.clear();
 				System.out.println(String.format("%5.2f fps", fps));
 				while (!Button.ESCAPE.isDown());

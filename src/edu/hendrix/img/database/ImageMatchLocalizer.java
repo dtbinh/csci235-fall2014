@@ -6,7 +6,6 @@ import lejos.hardware.Button;
 import lejos.hardware.lcd.LCD;
 import lejos.hardware.motor.Motor;
 import lejos.hardware.port.SensorPort;
-import lejos.hardware.sensor.EV3GyroSensor;
 import edu.hendrix.ev3webcam.Webcam;
 import edu.hendrix.ev3webcam.YUYVImage;
 import edu.hendrix.img.IntImage;
@@ -34,6 +33,14 @@ abstract public class ImageMatchLocalizer<T,M extends ImageMatcher<T>> {
 	
 	abstract public M makeMatcherFrom(YUYVImageList images);
 	
+	public void msg(String msg) {
+		LCD.drawString(msg, 8, 2);
+	}
+	
+	public void ok() {
+		msg("OK!       ");
+	}
+	
 	public void run() {
 		ButtonMover mover = new ButtonMover(Motor.A, Motor.D, 300, 150);
 		YUYVImageListStorage storage = YUYVImageListStorage.getEV3Storage();
@@ -47,8 +54,7 @@ abstract public class ImageMatchLocalizer<T,M extends ImageMatcher<T>> {
 			LCD.clear();
 			LCD.drawString("Starting webcam...", 0, 0);
 			
-			EV3GyroSensor gyro = new EV3GyroSensor(SensorPort.S4);
-			GyroLocalizer localizer = new GyroLocalizer(Motor.A, Motor.D, gyro);
+			GyroLocalizer localizer = new GyroLocalizer(Motor.A, Motor.D, SensorPort.S4);
 			Location prev = new Location(0, 0, 0);
 			try {
 				Webcam.start();
@@ -59,19 +65,19 @@ abstract public class ImageMatchLocalizer<T,M extends ImageMatcher<T>> {
 					Location at = localizer.getLocation();
 					if (at.distanceTo(prev) > checkDistance) {
 						mover.stop();
-						LCD.drawString("   ", 10, 2);
+						msg("Imaging...");
 						ImageMatch now = matcher.getBestMatch(img);
 						LCD.drawString(String.format("%7.2f    ", now.getDistance()), 0, 6);
 						IntImage match4 = IntImage.toShrunkenGrayInts(now.getImage(), 4);
 						match4.displayLCD(0, LCD.SCREEN_HEIGHT / 2);
 						localizer.reset(at.partialMeanWith(prev, getImageShare(now.getDistance())));
 						prev = localizer.getLocation();
-						LCD.drawString("OK!", 10, 2);
+						ok();
 					} else if (Button.DOWN.isDown()) {
-						LCD.drawString("   ", 10, 2);
+						msg("Reset...");
 						mover.stop();
 						localizer.totalReset();
-						LCD.drawString("OK!", 10, 2);
+						ok();
 					} else {
 						mover.move();
 					}
@@ -79,12 +85,16 @@ abstract public class ImageMatchLocalizer<T,M extends ImageMatcher<T>> {
 					img4.displayLCD(0, 0);
 					localizer.getLocation().display(7);
 				}
+				msg("Closing...");
+				Webcam.end();
 
 			} catch (IOException e) {
 				e.printStackTrace();
 				System.out.println("Driver exception: " + e.getMessage());
+			} finally {
+				localizer.close();
+				ok();
 			}
-			gyro.close();
 		}
 	}
 }

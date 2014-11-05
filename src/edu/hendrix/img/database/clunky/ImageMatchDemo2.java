@@ -6,7 +6,6 @@ import lejos.hardware.Button;
 import lejos.hardware.lcd.LCD;
 import lejos.hardware.motor.Motor;
 import lejos.hardware.port.SensorPort;
-import lejos.hardware.sensor.EV3GyroSensor;
 import edu.hendrix.ev3webcam.Webcam;
 import edu.hendrix.ev3webcam.YUYVImage;
 import edu.hendrix.img.IntImage;
@@ -34,8 +33,7 @@ abstract public class ImageMatchDemo2<T,M extends ImageMatcher<T>> {
 		
 		@Override
 		public void run() {
-			EV3GyroSensor gyro = new EV3GyroSensor(SensorPort.S4);
-			GyroLocalizer localizer = new GyroLocalizer(Motor.A, Motor.D, gyro);
+			GyroLocalizer localizer = new GyroLocalizer(Motor.A, Motor.D, SensorPort.S4);
 			try {
 				Webcam.start();
 				LCD.clear();
@@ -58,7 +56,7 @@ abstract public class ImageMatchDemo2<T,M extends ImageMatcher<T>> {
 				e.printStackTrace();
 				System.out.println("Driver exception: " + e.getMessage());
 			}
-			gyro.close();
+			localizer.close();
 		}
 	}
 	

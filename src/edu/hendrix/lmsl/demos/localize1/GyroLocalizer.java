@@ -1,15 +1,18 @@
 package edu.hendrix.lmsl.demos.localize1;
 
 import lejos.hardware.motor.NXTRegulatedMotor;
+import lejos.hardware.port.Port;
 import lejos.hardware.sensor.EV3GyroSensor;
 
 public class GyroLocalizer extends AbstractLocalizer {
 	private EV3GyroSensor gyro;
 	private float[] value;
+	private Port gyroPort;
 
-	public GyroLocalizer(NXTRegulatedMotor left, NXTRegulatedMotor right, EV3GyroSensor gyro) {
+	public GyroLocalizer(NXTRegulatedMotor left, NXTRegulatedMotor right, Port port) {
 		super(left, right);
-		this.gyro = gyro;
+		this.gyro = new EV3GyroSensor(port);
+		gyroPort = port;
 		value = new float[gyro.getAngleMode().sampleSize()];
 	}
 
@@ -20,8 +23,12 @@ public class GyroLocalizer extends AbstractLocalizer {
 	}
 	
 	public void totalReset() {
-		gyro.getRateMode();
-		gyro.getAngleMode();
+		gyro.close();
+		gyro = new EV3GyroSensor(gyroPort);
 		super.reset(new Location(0, 0, 0));
+	}
+	
+	public void close() {
+		gyro.close();
 	}
 }
